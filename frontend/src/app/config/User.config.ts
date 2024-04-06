@@ -17,7 +17,12 @@ export class UserConfig {
     }
 
      getUserConfig(){
-      return  JSON.parse(localStorage.getItem('user_config') || '{}');
+      try {
+        return  JSON.parse(localStorage.getItem('user_config') || '{}');
+      } catch (error) {
+        return UserConfigSettings;
+      }
+
     }
 
     getDefaultConfig(){

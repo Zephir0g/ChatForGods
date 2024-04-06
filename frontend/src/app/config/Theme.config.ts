@@ -11,7 +11,7 @@ export class ThemeConfig {
   }
 
   applyTheme() {
-    document.body.setAttribute('data-theme', this.getTheme());
+    // document.body.setAttribute('data-theme', this.getTheme());
   }
 
   getTheme() {
