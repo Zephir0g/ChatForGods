@@ -34,6 +34,8 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectEvent event) {
 
+        StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
+
         Map<String, List<String>> nativeHeaders = (Map<String, List<String>>) event.getMessage().getHeaders().get("nativeHeaders");
         List<String> userTokens = nativeHeaders.get("user_token");
         String userToken = null;

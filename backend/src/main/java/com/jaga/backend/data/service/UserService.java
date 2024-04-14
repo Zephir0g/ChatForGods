@@ -4,6 +4,7 @@ import com.jaga.backend.data.dto.ErrorDto;
 import com.jaga.backend.data.entity.Chat;
 import com.jaga.backend.data.entity.User;
 import com.jaga.backend.data.repositories.UserRepository;
+import com.jaga.backend.error.ErrorException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class UserService {
 
     public User registerUser(User user, String token) throws Exception {
         if (getUserByUsername(user.getUsername()).isPresent()) {
-            messageSendingService.sendError(new ErrorDto("User already exists", "/topic/auth/" + token, HttpStatus.BAD_REQUEST.value()));
-            return null;
+//            messageSendingService.sendError(new ErrorDto("User already exists", "/topic/auth/" + token, HttpStatus.BAD_REQUEST.value()));
+            throw new ErrorException("User already exists", "/topic/auth/" + token, HttpStatus.BAD_REQUEST.value());
         }
 
         return userRepository.save(user);
@@ -34,14 +35,14 @@ public class UserService {
 
         // If user is not found, send error message
         if (!user.isPresent()) {
-            messageSendingService.sendError(new ErrorDto("User not found", "/topic/auth/" + token, HttpStatus.NOT_FOUND.value()));
-            return null;
+//            messageSendingService.sendError(new ErrorDto("User not found", "/topic/auth/" + token, HttpStatus.NOT_FOUND.value()));
+            throw new ErrorException("User not found", "/topic/auth/" + token, HttpStatus.NOT_FOUND.value());
         }
 
         // If password is incorrect, send error message
         if (!Arrays.equals(user.get().getPassword(), password)) {
-            messageSendingService.sendError(new ErrorDto("Password incorrect", "/topic/auth/" + token, HttpStatus.BAD_REQUEST.value()));
-            return null;
+//            messageSendingService.sendError(new ErrorDto("Password incorrect", "/topic/auth/" + token, HttpStatus.BAD_REQUEST.value()));
+            throw new ErrorException("Password incorrect", "/topic/auth/" + token, HttpStatus.BAD_REQUEST.value());
         }
 
         return user.get();
